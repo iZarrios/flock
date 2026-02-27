@@ -1,11 +1,12 @@
 #pragma once
 
 #include "fmt/format.h"
-#include <nlohmann/json.hpp>
 #include <regex>
 
+#include "flock/core/common.hpp"
 #include "flock/model_manager/providers/handlers/handler.hpp"
 #include "flock/model_manager/repository.hpp"
+#include <nlohmann/json.hpp>
 
 namespace flock {
 
@@ -28,12 +29,16 @@ public:
 
     virtual void AddCompletionRequest(const std::string& prompt, const int num_output_tuples, OutputType output_type, const nlohmann::json& media_data) = 0;
     virtual void AddEmbeddingRequest(const std::vector<std::string>& inputs) = 0;
+    virtual void AddTranscriptionRequest(const nlohmann::json& audio_files) = 0;
 
     virtual std::vector<nlohmann::json> CollectCompletions(const std::string& contentType = "application/json") {
         return model_handler_->CollectCompletions(contentType);
     }
     virtual std::vector<nlohmann::json> CollectEmbeddings(const std::string& contentType = "application/json") {
         return model_handler_->CollectEmbeddings(contentType);
+    }
+    virtual std::vector<nlohmann::json> CollectTranscriptions(const std::string& contentType = "multipart/form-data") {
+        return model_handler_->CollectTranscriptions(contentType);
     }
 
     static std::string GetOutputTypeString(const OutputType output_type) {
