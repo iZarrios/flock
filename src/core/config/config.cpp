@@ -60,6 +60,9 @@ void Config::ConfigureGlobal(duckdb::DatabaseInstance* db_instance) {
     }
     // Use the already-attached flock_storage database
     auto con = Config::GetConnection(db_instance);
+    // Switch to flock_storage so ConfigureTables creates tables there.
+    // We switch back to memory afterward to avoid leaving the connection
+    // pointing at flock_storage, which would affect subsequent queries.
     auto use_result = con.Query("USE flock_storage;");
     if (use_result->HasError()) {
         std::cerr << "Failed to USE flock_storage: " << use_result->GetError() << std::endl;
