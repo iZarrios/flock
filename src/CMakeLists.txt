@@ -8,6 +8,5 @@ add_subdirectory(secret_manager)
 add_subdirectory(metrics)
 
 set(EXTENSION_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/flock_extension.cpp
-    ${EXTENSION_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/flock_extension.cpp ${EXTENSION_SOURCES}
     PARENT_SCOPE)

@@ -72,6 +72,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
   add_link_options(-fprofile-instr-generate -fcoverage-mapping)
 endif()
 
-# # Add the test directory
-# enable_testing()
-# add_subdirectory(test/unit)
+if(NOT EMSCRIPTEN)
+    # Add the test directory if not on WASM
+    enable_testing()
+    add_subdirectory(test/unit)
+endif()

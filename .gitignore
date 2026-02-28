@@ -17,4 +17,3 @@ tags/
 notebooks/data
 notebooks/*.ipynb
 /research_papers/
-.cache/clangd/index
