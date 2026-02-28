@@ -113,6 +113,11 @@ void Config::Configure(duckdb::ExtensionLoader& loader) {
     ConfigureGlobal(&db);
 }
 
+void Config::AttachToGlobalStorage(duckdb::Connection& con, bool read_only) {
+    con.Query(duckdb_fmt::format("ATTACH DATABASE '{}' AS flock_storage {};",
+                                 Config::get_global_storage_path().string(), read_only ? "(READ_ONLY)" : ""));
+}
+
 void Config::DetachFromGlobalStorage(duckdb::Connection& con) {
     con.Query("DETACH DATABASE flock_storage;");
 }
@@ -155,13 +160,6 @@ Config::StorageAttachmentGuard::StorageAttachmentGuard(duckdb::Connection& con, 
     Config::AttachToGlobalStorage(connection, read_only);
     attached = true;
 }
-
-
-void Config::AttachToGlobalStorage(duckdb::Connection& con, bool read_only) {
-    con.Query(duckdb_fmt::format("ATTACH DATABASE '{}' AS flock_storage {};",
-                                 Config::get_global_storage_path().string(), read_only ? "(READ_ONLY)" : ""));
-}
-
 
 Config::StorageAttachmentGuard::~StorageAttachmentGuard() {
     if (attached) {
